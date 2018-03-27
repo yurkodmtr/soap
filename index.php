@@ -26,11 +26,35 @@ class WsseAuthHeader extends SoapHeader {
     }
 }
 
-$client = new SoapClient("http://test.bestoftravel.cz:8080/booking/public/ws/syncLocation.wsdl");
-$client->__setSoapHeaders(Array(new WsseAuthHeader('17', '881Ass963WX')));
-$qqq = $client->pullLocations();
+// $client = new SoapClient("http://test.bestoftravel.cz:8080/booking/public/ws/syncLocation.wsdl");
+// $client->__setSoapHeaders(Array(new WsseAuthHeader('17', '881Ass963WX')));
+// $qqq = $client->pullLocations();
 
+$client = new SoapClient("http://test.bestoftravel.cz:8080/booking/public/ws/searchHotel.wsdl", array( 'trace' => 1));
+$client->__setSoapHeaders(Array(new WsseAuthHeader('17', '881Ass963WX')));
+
+$parameters= array(
+    'persons' => '2',
+    'locationIds'=>'', 
+    'hotelIds'=>'', 
+    'hotelServices'=>'', 
+    'outOperatorIncID' => '981208873',
+    'dateFrom' => '',
+    'nightsDuration' => '',
+    'availableOnly' => ''
+);
+$values = $client->hotelSearchStep1($parameters);
+
+
+
+// $qqq = $client->hotelSearchStep1(array(
+
+//     $outOperatorIncID,
+//     $dateFrom,
+//     $nightsDuration,
+//     $availableOnly,
+// ));
 echo "<pre>";
-print_r($qqq);
+print_r($values);
 
 ?>
