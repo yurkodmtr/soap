@@ -34,7 +34,11 @@ $client = new SoapClient("http://test.bestoftravel.cz:8080/booking/public/ws/sea
 $client->__setSoapHeaders(Array(new WsseAuthHeader('17', '881Ass963WX')));
 
 $parameters= array(
-    'persons' => '2',
+    'persons' => [
+        'adults' => 2,
+        'childAges' => ''
+    ],
+    'childAges'=> '',
     'locationIds'=>'', 
     'hotelIds'=>'', 
     'hotelServices'=>'', 
@@ -43,7 +47,19 @@ $parameters= array(
     'nightsDuration' => '',
     'availableOnly' => ''
 );
-$values = $client->hotelSearchStep1($parameters);
+
+
+try {
+    $values = $client->hotelSearchStep1($parameters);
+} catch (Exception $e) {
+    echo "<pre>";
+    print_r($e);
+    die();
+}
+
+print_r($client->__getLastRequest());
+
+
 
 
 
@@ -54,7 +70,7 @@ $values = $client->hotelSearchStep1($parameters);
 //     $nightsDuration,
 //     $availableOnly,
 // ));
-echo "<pre>";
+echo "<pre>"; 
 print_r($values);
 
 ?>
