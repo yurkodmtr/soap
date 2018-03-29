@@ -13,7 +13,7 @@ $parameters= array(
         'adults' => 1,
         'childAges' => [11]
     ],    
-    'locationIds'=>[111756], 
+    'locationIds'=>[153006], 
     'hotelIds'=>[], 
     'hotelServices'=> []    
 );
