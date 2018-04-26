@@ -14,7 +14,7 @@ var myFunc = function(){
                 success: function (data) {
                     var responce = data.location;
                     //console.log(typeof responce);
-                    countrySelectInit(responce);
+                    //countrySelectInit(responce);
                 },
                 error: function (data) {
                     console.log(data);
@@ -23,20 +23,97 @@ var myFunc = function(){
 		});
 	}
 
-	var countrySelectInit = function(data){
-		$.each(data, function(index, value) { 
-			if (index > 10) {
-				return false;
-			}  		
-			$('.select')
-				.append($("<option></option>")
-				.attr("value",value['id'])
-				.text(value['names']['en'])); 
-		});
+	var _citySelectInit = function(id, name, ){
+		$('select._city')
+			.append($("<option></option>")
+				.attr("value",id)
+				.text(name)
+			); 
+	}
+
+	var getLocaleListLocal = function(){
+		var data;
+		$.ajax({
+            url: "/country.json",
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                data = data.location;
+				$.each(data, function(index, value) {
+					if ( 
+						value.type === 'city' && 
+						value.parent_id == '118593' && 
+						value.status == 'active'
+					) { 
+						_citySelectInit(value.id, value.names.en);
+					}
+				});
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });        
+	}
+
+	var submitForm = function(){
+		$('.search_form form').on('submit', function (event) {
+        	event.preventDefault();
+
+        	var city = $('select._city').val();
+        	var checkInDate = $('._check_ind_date').val();
+        	if (checkInDate == '') {
+        		var d = new Date();
+				var month = d.getMonth()+1;
+				var day = d.getDate();
+				var output = d.getFullYear() + '-' +
+				    ((''+month).length<2 ? '0' : '') + month + '-' +
+				    ((''+day).length<2 ? '0' : '') + day;
+				checkInDate = output;
+        	}
+
+        	$('.loader').show();
+        	$.ajax({
+	            url: "/searchHotel.php",
+	            type: 'POST',
+	            dataType: 'json',
+	            data : {
+	            	city : city,
+	            	checkInDate : checkInDate
+	            },
+	            success: function (data) {
+	            	$('.table').html('');
+	            	if ( data.hotelOffers === null || data.hotelOffers === undefined || data.hotelOffers == '' ) {
+	            		$('.table').append($('<tr><td>Empty</td></tr>'));
+	            		$('.loader').hide();
+	            		return false;
+	            	}
+	                $.each(data.hotelOffers, function( index, value ) {
+					  	var name = value.hotel.name;
+					  	var category = value.hotel.hotelCategory.id;
+					  	switch(category) {
+						  case 7:
+						    category = 'Villa';
+						    break;
+						  case 8:
+						    category = "Appartment";
+						    break;
+						}
+					  	$('.table').append($('<tr><td>' + name + '</td><td>' + category + '*</td></tr>'));
+					});
+					$('.loader').hide();
+	            },
+	            error: function (data) {
+	                console.log(data);
+
+	            }
+	        });
+        });
 	}
 
 	$(document).ready(function(){
 		getLocaleList();
+		getLocaleListLocal();
+		submitForm();
 	});
 
 }
