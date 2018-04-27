@@ -60,7 +60,15 @@ var myFunc = function(){
         	event.preventDefault();
 
         	var city = $('select._city').val();
-        	var checkInDate = $('._check_ind_date').val();
+        	var hotelCategory = $('._hotel_category').val();
+        	var hotelName = $('._hotel_name').val();
+        	var checkInDate = $('._check_in_date').val();
+        	var checkOutDate = $('._check_out_date').val();
+        	var boardType = $('._board_type').val();
+        	var adults = $('._adults').val();
+        	var children = $('._children').val();
+
+
         	if (checkInDate == '') {
         		var d = new Date();
 				var month = d.getMonth()+1;
@@ -77,8 +85,14 @@ var myFunc = function(){
 	            type: 'POST',
 	            dataType: 'json',
 	            data : {
-	            	city : city,
-	            	checkInDate : checkInDate
+	            	city: city,
+	            	hotelCategory: hotelCategory,
+	            	hotelName: hotelName,
+	            	checkInDate: checkInDate,
+	            	checkOutDate: checkOutDate,
+	            	boardType: boardType,
+	            	adults: adults,
+	            	children: children
 	            },
 	            success: function (data) {
 	            	$('.table').html('');
@@ -88,6 +102,7 @@ var myFunc = function(){
 	            		return false;
 	            	}
 	                $.each(data.hotelOffers, function( index, value ) {
+	                	console.log(value);
 					  	var name = value.hotel.name;
 					  	var category = value.hotel.hotelCategory.id;
 					  	switch(category) {

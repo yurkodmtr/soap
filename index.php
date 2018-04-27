@@ -24,13 +24,13 @@
     		</div>
     		<div class="row">
     			<div class="title">Hotel</div>
-    			<select class="_hotel">
+    			<select class="_hotel_name">
     				<option>All</option>
     			</select>
     		</div>
     		<div class="row">
     			<div class="title">Check-in date</div>
-    			<input type="date" class="_check_ind_date">
+    			<input type="date" class="_check_in_date">
     		</div>
     		<div class="row">
     			<div class="title">Check-out date</div>
