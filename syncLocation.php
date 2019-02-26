@@ -3,7 +3,7 @@
 include 'auth.php';
 
 $client = new SoapClient("http://test.bestoftravel.cz:8080/booking/public/ws/syncLocation.wsdl");
-$client->__setSoapHeaders(Array(new WsseAuthHeader('17', '881Ass963WX')));
+$client->__setSoapHeaders(Array(new WsseAuthHeader($AuthUser, $AuthPassword)));
 $qqq = $client->pullLocations();
 $data = json_encode($qqq);
 

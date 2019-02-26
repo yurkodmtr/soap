@@ -1,5 +1,10 @@
 <?php
 
+$AuthUser = 5;
+$AuthPassword = '56r5bnyXW2';
+$AuthCompanyId = '981208873'; 
+
+
 class WsseAuthHeader extends SoapHeader {
     private $wss_ns = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd';
     private $wsu_ns = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd';
