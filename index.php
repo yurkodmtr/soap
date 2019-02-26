@@ -23,7 +23,7 @@
     			</select>
     		</div>
     		<div class="row">
-    			<div class="title">Hotel</div>
+    			<div class="title">Hotel Name</div>
     			<select class="_hotel_name">
     				<option>All</option>
     			</select>
@@ -36,6 +36,10 @@
     			<div class="title">Check-out date</div>
     			<input type="date" class="_check_out_date">
     		</div>
+            <div class="row">
+                <div class="title">Nights count</div>
+                <input type="number" class="_nights_count" min="1" value="1">
+            </div>
     		<div class="row">
     			<div class="title">Board type</div>
     			<select class="_board_type">
@@ -50,15 +54,15 @@
     		<div class="row">
     			<div class="title">Adults</div>
     			<select class="_adults">
-    				<option>1</option>
-    				<option>2</option>
-    				<option>3</option>
-    				<option>4</option>
-    				<option>5</option>
-    				<option>6</option>
-    				<option>7</option>
-    				<option>8</option>
-    				<option>9</option>
+    				<option value="1">1</option>
+    				<option value="2">2</option>
+    				<option value="3">3</option>
+    				<option value="4">4</option>
+    				<option value="5">5</option>
+    				<option value="6">6</option>
+    				<option value="7">7</option>
+    				<option value="8">8</option>
+    				<option value="9">9</option>
     			</select>
     		</div>
     		<div class="row">

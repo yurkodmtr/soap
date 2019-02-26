@@ -2,25 +2,42 @@
 
 var myFunc = function(){
 
-	var getLocaleList = function(){
-		$('.qqq').click(function(){
-			$.ajax({
-                url: "/syncLocation.php",
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    email: '111'
-                },
-                success: function (data) {
-                    var responce = data.location;
-                    //console.log(typeof responce);
-                    //countrySelectInit(responce);
-                },
-                error: function (data) {
-                    console.log(data);
-                }
-            });
-		});
+	var getHotelsByCity = function(id){
+
+		$.ajax({
+            url: "/getHotelsByCity.php",
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id: id
+            },
+            success: function (data) {
+            	$('select._hotel_name option').remove();
+            	if ( data !== undefined && data.hotel !== undefined ) {
+            		var data = data.hotel;
+					$.each(data, function(index, value) { 						
+						$('select._hotel_name')
+							.append($("<option></option>")
+								.attr("value",value.id)
+								.text(value.name)
+							);
+					});
+
+            	} else {
+	            	$('select._hotel_name')
+						.append($("<option></option>")
+							.attr("value",'')
+							.text('no result')
+						);
+            	}
+            	
+            	
+            },
+            error: function (data) {
+                console.log('dataaa - ', data);
+            }
+        });
+
 	}
 
 	var _citySelectInit = function(id, name, ){
@@ -29,6 +46,13 @@ var myFunc = function(){
 				.attr("value",id)
 				.text(name)
 			); 
+	}
+
+	var loadHotels = function(){
+		$('select._city').change(function(){
+			var val = $(this).val();
+			var hotels = getHotelsByCity(val);
+		});
 	}
 
 	var getLocaleListLocal = function(){
@@ -67,7 +91,8 @@ var myFunc = function(){
         	var boardType = $('._board_type').val();
         	var adults = $('._adults').val();
         	var children = $('._children').val();
-
+        	var hotelName = $('select._hotel_name').val();
+        	var nightDuration = 1;
 
         	if (checkInDate == '') {
         		var d = new Date();
@@ -79,6 +104,25 @@ var myFunc = function(){
 				checkInDate = output;
         	}
 
+        	console.log(checkInDate);
+
+        	function showDays(firstDate,secondDate){
+				var startDay = new Date(firstDate);
+				var endDay = new Date(secondDate);
+				var millisecondsPerDay = 1000 * 60 * 60 * 24;
+
+				var millisBetween = startDay.getTime() - endDay.getTime();
+				var days = millisBetween / millisecondsPerDay;
+
+				nightDuration = Math.floor(days);
+			}
+
+			showDays(checkOutDate,checkInDate);
+
+
+        	
+
+
         	$('.loader').show();
         	$.ajax({
 	            url: "/searchHotel.php",
@@ -89,12 +133,14 @@ var myFunc = function(){
 	            	hotelCategory: hotelCategory,
 	            	hotelName: hotelName,
 	            	checkInDate: checkInDate,
-	            	checkOutDate: checkOutDate,
+	            	nightDuration: nightDuration,
 	            	boardType: boardType,
 	            	adults: adults,
-	            	children: children
+	            	children: children,
+	            	hotelName: hotelName
 	            },
 	            success: function (data) {
+	            	console.log('data - ', data);
 	            	$('.table').html('');
 	            	if ( data.hotelOffers === null || data.hotelOffers === undefined || data.hotelOffers == '' ) {
 	            		$('.table').append($('<tr><td>Empty</td></tr>'));
@@ -102,7 +148,7 @@ var myFunc = function(){
 	            		return false;
 	            	}
 	                $.each(data.hotelOffers, function( index, value ) {
-	                	console.log(value);
+	                	console.log(value); 
 					  	var name = value.hotel.name;
 					  	var category = value.hotel.hotelCategory.id;
 					  	switch(category) {
@@ -126,7 +172,7 @@ var myFunc = function(){
 	}
 
 	$(document).ready(function(){
-		getLocaleList();
+		loadHotels();
 		getLocaleListLocal();
 		submitForm();
 	});
